@@ -1,12 +1,20 @@
-FROM golang:1.22 AS builder
+FROM golang:alpine3.21 AS builder
 
-WORKDIR /app
+ARG APP
+
+WORKDIR /build
+
+COPY go.mod .
+RUN go mod download
 COPY . .
-RUN go mod tidy
-RUN go build -o app .
+RUN go build -o ${APP} ${APP}/cmd/main.go
 
-FROM debian:bookworm-slim
+FROM alpine:3.21
+
+ARG APP
+
 WORKDIR /app
-COPY --from=builder /app/app .
-EXPOSE 8080
-CMD ["./app"]
+COPY ./api/font /font
+COPY --from=builder /build/${APP}/main /app/main
+
+ENTRYPOINT ["/app/main"]
