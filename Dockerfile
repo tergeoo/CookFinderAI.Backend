@@ -1,4 +1,4 @@
-FROM golang:1.24-alpine AS builder
+FROM golang:1.24.1-alpine AS builder
 
 ARG APP=app
 
@@ -10,7 +10,8 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /build/${APP} ./cmd/main.go
+# Укажи путь к main.go здесь
+RUN go build -o /build/${APP} ./cmd/${APP}/main.go
 
 FROM alpine:3.21
 
@@ -21,5 +22,4 @@ WORKDIR /app
 COPY --from=builder /build/${APP} /app/main
 
 EXPOSE 8080
-
 ENTRYPOINT ["/app/main"]
