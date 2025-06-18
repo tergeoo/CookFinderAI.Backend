@@ -1,0 +1,415 @@
+definitions:
+  dto.Category:
+    properties:
+      id:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+    type: object
+  dto.Ingredient:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  dto.RecipeResponse:
+    properties:
+      category:
+        $ref: '#/definitions/dto.Category'
+      cook_time_min:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      ingredients:
+        items:
+          $ref: '#/definitions/dto.Ingredient'
+        type: array
+      method:
+        type: string
+      prep_time_min:
+        type: integer
+      title:
+        type: string
+    type: object
+  model.Ingredient:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /categories:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.Category'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all categories
+      tags:
+      - Categories
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Category body
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Category'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.Category'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new category
+      tags:
+      - Categories
+  /categories/{id}:
+    delete:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete category by ID
+      tags:
+      - Categories
+    get:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Category'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get category by ID
+      tags:
+      - Categories
+  /ingredients:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Ingredient'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all ingredients
+      tags:
+      - IngredientIDs
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Ingredient body
+        in: body
+        name: ingredient
+        required: true
+        schema:
+          $ref: '#/definitions/model.Ingredient'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Ingredient'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new ingredient
+      tags:
+      - IngredientIDs
+  /ingredients/{id}:
+    delete:
+      parameters:
+      - description: Ingredient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete ingredient by ID
+      tags:
+      - IngredientIDs
+    get:
+      parameters:
+      - description: Ingredient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Ingredient'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get ingredient by ID
+      tags:
+      - IngredientIDs
+  /recipes:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.RecipeResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all recipes
+      tags:
+      - Recipes
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: RecipeResponse body
+        in: body
+        name: recipe
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RecipeResponse'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.RecipeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new recipe
+      tags:
+      - Recipes
+  /recipes/{id}:
+    delete:
+      parameters:
+      - description: RecipeResponse ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete recipe by ID
+      tags:
+      - Recipes
+    get:
+      parameters:
+      - description: RecipeResponse ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.RecipeResponse'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get recipe by ID
+      tags:
+      - Recipes
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: RecipeResponse ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: RecipeResponse body
+        in: body
+        name: recipe
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RecipeResponse'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.RecipeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update recipe by ID
+      tags:
+      - Recipes
+  /upload:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Image File
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Upload image file
+      tags:
+      - Upload
+swagger: "2.0"
