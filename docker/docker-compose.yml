@@ -1,0 +1,15 @@
+volumes:
+  cook-finder:
+
+services:
+  cook-finder:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: cook_finder
+      POSTGRES_USER: cook_finder
+      POSTGRES_PASSWORD: cook_finder
+    ports:
+      - "6464:5432"
+    volumes:
+      - cook-finder:/var/lib/postgresql/data
