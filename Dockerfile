@@ -14,7 +14,6 @@ FROM alpine:3.21
 ARG APP
 
 WORKDIR /app
-COPY ./api/font /font
 COPY --from=builder /build/${APP}/main /app/main
 
 ENTRYPOINT ["/app/main"]
