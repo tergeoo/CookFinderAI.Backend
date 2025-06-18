@@ -1,19 +1,25 @@
-FROM golang:alpine3.21 AS builder
+FROM golang:1.22-alpine AS builder
 
-ARG APP
+ARG APP=app
 
 WORKDIR /build
 
-COPY go.mod .
+COPY go.mod ./
+COPY go.sum ./
 RUN go mod download
+
 COPY . .
-RUN go build -o ${APP} ${APP}/cmd/main.go
+
+RUN go build -o /build/${APP} ./cmd/main.go
 
 FROM alpine:3.21
 
-ARG APP
+ARG APP=app
 
 WORKDIR /app
-COPY --from=builder /build/${APP}/main /app/main
+
+COPY --from=builder /build/${APP} /app/main
+
+EXPOSE 8080
 
 ENTRYPOINT ["/app/main"]
