@@ -14,10 +14,13 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
+	"os"
 )
 
 func main() {
-	DB, err := sqlx.Connect("postgres", "postgres://cook_finder:cook_finder@localhost:6464/cook_finder?sslmode=disable")
+	dbURL := os.Getenv("DATABASE_URL")
+	//DB, err := sqlx.Connect("postgres", "postgres://cook_finder:cook_finder@localhost:6464/cook_finder?sslmode=disable")
+	DB, err := sqlx.Connect("postgres", dbURL)
 	if err != nil {
 		log.Fatalf("failed to connect to DB: %v", err)
 	}
