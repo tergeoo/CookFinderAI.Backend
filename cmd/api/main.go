@@ -18,7 +18,11 @@ import (
 )
 
 func main() {
+	slog.Info("Starting CookFinder Backend")
 	dbURL := os.Getenv("DATABASE_PUBLIC_URL")
+
+	slog.Info("Connecting to database", "url", dbURL)
+
 	//DB, err := sqlx.Connect("postgres", "postgres://cook_finder:cook_finder@localhost:6464/cook_finder?sslmode=disable")
 	DB, err := sqlx.Connect("postgres", dbURL)
 	if err != nil {
