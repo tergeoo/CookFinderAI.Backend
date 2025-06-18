@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	dbURL := os.Getenv("DATABASE_URL")
+	dbURL := os.Getenv("DATABASE_PUBLIC_URL")
 	//DB, err := sqlx.Connect("postgres", "postgres://cook_finder:cook_finder@localhost:6464/cook_finder?sslmode=disable")
 	DB, err := sqlx.Connect("postgres", dbURL)
 	if err != nil {
