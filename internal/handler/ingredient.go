@@ -86,7 +86,8 @@ func (h *IngredientHandler) Create(c *gin.Context) {
 	}
 
 	result := &model.Ingredient{
-		Name: input.Name,
+		Name:     input.Name,
+		ImageUrl: input.ImageUrl,
 	}
 
 	if err := h.service.Create(c.Request.Context(), result); err != nil {
