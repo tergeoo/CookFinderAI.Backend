@@ -3,28 +3,26 @@ package handler
 import (
 	"CookFinder.Backend/internal/model"
 	"CookFinder.Backend/internal/service"
+	"CookFinder.Backend/internal/storage"
 	"CookFinder.Backend/pkg/uuid"
-	"fmt"
+	"github.com/gin-gonic/gin"
 	"log/slog"
 	"net/http"
-	"os"
-	"path/filepath"
-	"strings"
-	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 type FileHandler struct {
 	fileService *service.FileService
+	storage     *storage.YandexStorage
 }
 
 func NewFileHandler(
 	r *gin.Engine,
 	fileService *service.FileService,
+	storage *storage.YandexStorage,
 ) {
 	h := &FileHandler{
 		fileService: fileService,
+		storage:     storage,
 	}
 	r.POST("/upload", h.Upload)
 	r.GET("/files", h.GetAll)
@@ -43,27 +41,30 @@ func NewFileHandler(
 // @Failure 500 {object} map[string]string
 // @Router /upload [post]
 func (it *FileHandler) Upload(c *gin.Context) {
-	file, err := c.FormFile("image")
+	fileHeader, err := c.FormFile("image")
 	if err != nil {
 		slog.Error("failed to get uploaded file", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "no file provided"})
 		return
 	}
 
-	filename := fmt.Sprintf("%d_%s", time.Now().UnixNano(), sanitizeFilename(file.Filename))
-	path := filepath.Join("uploads", filename)
+	file, err := fileHeader.Open()
+	if err != nil {
+		slog.Error("failed to open uploaded file", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to open file"})
+		return
+	}
+	defer file.Close()
 
-	if err := c.SaveUploadedFile(file, path); err != nil {
-		slog.Error("failed to save uploaded file", "error", err)
+	url, err := it.storage.UploadFile(c, file, fileHeader)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "upload failed"})
 		return
 	}
 
-	url := "/static/" + filename
-
 	f := &model.File{
 		ID:   uuid.V7().String(),
-		Name: file.Filename,
+		Name: fileHeader.Filename,
 		Path: url,
 	}
 
@@ -74,7 +75,7 @@ func (it *FileHandler) Upload(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusNoContent)
+	c.JSON(http.StatusOK, gin.H{"path": url})
 }
 
 // GetAll godoc
@@ -104,37 +105,23 @@ func (it *FileHandler) GetAll(c *gin.Context) {
 func (it *FileHandler) Delete(c *gin.Context) {
 	id := c.Param("id")
 
-	// Получаем метаинформацию о файле из БД
 	f, err := it.fileService.GetFileByID(c, id)
 	if err != nil {
-		slog.Error("failed to get file", "error", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": "file not found"})
 		return
 	}
 
-	// Удаляем сам файл с диска
-	filePath := filepath.Join("uploads", filepath.Base(f.Path)) // безопасное соединение пути
-	if err := os.Remove(filePath); err != nil && !os.IsNotExist(err) {
-		slog.Error("failed to delete file from disk", "error", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete file"})
+	if err := it.storage.DeleteFile(c.Request.Context(), f.Name); err != nil {
+		slog.Error("failed to delete file from storage", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete from storage"})
 		return
 	}
 
-	// Удаляем метаинформацию из БД
 	if err := it.fileService.DeleteFile(c, id); err != nil {
 		slog.Error("failed to delete file metadata", "error", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete file metadata"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete metadata"})
 		return
 	}
 
 	c.Status(http.StatusNoContent)
-}
-
-func sanitizeFilename(name string) string {
-	return strings.Map(func(r rune) rune {
-		if r == ' ' || r == '-' || r == '_' || r == '.' || (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9') {
-			return r
-		}
-		return '_'
-	}, name)
 }

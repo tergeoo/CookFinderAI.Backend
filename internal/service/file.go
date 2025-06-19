@@ -14,18 +14,18 @@ func NewFileService(repo *repository.FileRepository) *FileService {
 	return &FileService{repo: repo}
 }
 
-func (s *FileService) CreateFile(ctx context.Context, file *model.File) error {
-	return s.repo.Create(ctx, file)
+func (it *FileService) CreateFile(ctx context.Context, file *model.File) error {
+	return it.repo.Create(ctx, file)
 }
 
-func (s *FileService) GetAllFiles(ctx context.Context) ([]model.File, error) {
-	return s.repo.GetAll(ctx)
+func (it *FileService) GetAllFiles(ctx context.Context) ([]model.File, error) {
+	return it.repo.GetAll(ctx)
 }
 
-func (s *FileService) GetFileByID(ctx context.Context, id string) (*model.File, error) {
-	return s.repo.GetByID(ctx, id)
+func (it *FileService) GetFileByID(ctx context.Context, id string) (*model.File, error) {
+	return it.repo.GetByID(ctx, id)
 }
 
-func (s *FileService) DeleteFile(ctx context.Context, id string) error {
-	return s.repo.Delete(ctx, id)
+func (it *FileService) DeleteFile(ctx context.Context, id string) error {
+	return it.repo.Delete(ctx, id)
 }

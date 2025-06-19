@@ -108,6 +108,8 @@ func (h *IngredientHandler) Create(c *gin.Context) {
 // @Failure 500 {object} map[string]string
 // @Router /ingredients/{id} [put]
 func (h *IngredientHandler) Update(c *gin.Context) {
+	id := c.Param("id")
+
 	var input dto.IngredientRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -115,7 +117,7 @@ func (h *IngredientHandler) Update(c *gin.Context) {
 	}
 
 	ingredient := &model.Ingredient{
-		ID:       input.ID,
+		ID:       id,
 		Name:     input.Name,
 		ImageUrl: input.ImageUrl,
 	}

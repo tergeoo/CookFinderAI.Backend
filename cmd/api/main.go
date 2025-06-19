@@ -5,6 +5,7 @@ import (
 	"CookFinder.Backend/internal/handler"
 	repository "CookFinder.Backend/internal/repo"
 	"CookFinder.Backend/internal/service"
+	"CookFinder.Backend/internal/storage"
 	"CookFinder.Backend/migrations"
 	"CookFinder.Backend/pkg/db"
 	"github.com/gin-contrib/cors"
@@ -42,6 +43,16 @@ func main() {
 	fileRepo := repository.NewFileRepository(DB)
 	recipeIngredientRepo := repository.NewRecipeIngredientRepository(DB)
 
+	yStorage, err := storage.NewYandexStorage(
+		os.Getenv("YANDEX_ENDPOINT"),
+		os.Getenv("YANDEX_ACCESS_KEY"),
+		os.Getenv("YANDEX_SECRET_KEY"),
+		os.Getenv("YANDEX_BUCKET"),
+	)
+	if err != nil {
+		slog.Info("Failed to create Yandex Storage client", "error", err)
+	}
+
 	ingService := service.NewIngredientService(ingRepo)
 	catService := service.NewCategoryService(catRepo)
 	recipeService := service.NewRecipeService(recipeRepo, recipeIngredientRepo)
@@ -63,7 +74,7 @@ func main() {
 	handler.NewIngredientHandler(r, ingService)
 	handler.NewCategoryHandler(r, catService)
 	handler.NewRecipeHandler(r, recipeService)
-	handler.NewFileHandler(r, fileService)
+	handler.NewFileHandler(r, fileService, yStorage)
 
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})

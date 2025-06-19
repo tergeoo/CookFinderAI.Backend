@@ -21,7 +21,7 @@ func NewCategoryHandler(r *gin.Engine, svc *service.CategoryService) {
 		routes.GET(":id", h.GetByID)
 		routes.POST("", h.Create)
 		routes.DELETE(":id", h.Delete)
-		routes.PUT("", h.Update)
+		routes.PUT(":id", h.Update)
 	}
 }
 
@@ -108,6 +108,8 @@ func (h *CategoryHandler) Create(c *gin.Context) {
 // @Failure 500 {object} map[string]string
 // @Router /categories [post]
 func (h *CategoryHandler) Update(c *gin.Context) {
+	id := c.Param("id")
+
 	var input dto.Category
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -115,7 +117,7 @@ func (h *CategoryHandler) Update(c *gin.Context) {
 	}
 
 	rc := &model.Category{
-		ID:       input.ID,
+		ID:       id,
 		Name:     input.Name,
 		ImageUrl: input.ImageURL,
 	}
