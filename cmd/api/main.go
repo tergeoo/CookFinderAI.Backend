@@ -9,6 +9,7 @@ import (
 	"CookFinder.Backend/pkg/db"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
@@ -37,10 +38,13 @@ func main() {
 	ingRepo := repository.NewIngredientRepository(DB)
 	catRepo := repository.NewCategoryRepository(DB)
 	recipeRepo := repository.NewRecipeRepository(DB)
+	fileRepo := repository.NewFileRepository(DB)
+	recipeIngredientRepo := repository.NewRecipeIngredientRepository(DB)
 
 	ingService := service.NewIngredientService(ingRepo)
 	catService := service.NewCategoryService(catRepo)
-	recipeService := service.NewRecipeService(recipeRepo, ingRepo, catRepo)
+	recipeService := service.NewRecipeService(recipeRepo, recipeIngredientRepo)
+	fileService := service.NewFileService(fileRepo)
 
 	r := gin.Default()
 
@@ -50,12 +54,13 @@ func main() {
 	handler.NewIngredientHandler(r, ingService)
 	handler.NewCategoryHandler(r, catService)
 	handler.NewRecipeHandler(r, recipeService)
-	handler.NewUploadHandler(r)
+	handler.NewFileHandler(r, fileService)
 
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
 	log.Println("Server running on :8080")
+
 	r.Run(":8080")
 }

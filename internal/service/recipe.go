@@ -2,45 +2,67 @@ package service
 
 import (
 	"CookFinder.Backend/internal/model"
-	repository "CookFinder.Backend/internal/repo"
+	"CookFinder.Backend/internal/repo"
 	"CookFinder.Backend/pkg/uuid"
 	"context"
+	"time"
 )
 
 type RecipeService struct {
-	repo    *repository.RecipeRepository
-	ingRepo *repository.IngredientRepository
-	catRepo *repository.CategoryRepository
+	recipeRepo     *repo.RecipeRepository
+	recipeIngrRepo *repo.RecipeIngredientRepository
 }
 
 func NewRecipeService(
-	repo *repository.RecipeRepository,
-	ingRepo *repository.IngredientRepository,
-	catRepo *repository.CategoryRepository,
+	repo *repo.RecipeRepository,
+	ingrRepo *repo.RecipeIngredientRepository,
 ) *RecipeService {
-	return &RecipeService{repo: repo, ingRepo: ingRepo, catRepo: catRepo}
+	return &RecipeService{
+		recipeRepo:     repo,
+		recipeIngrRepo: ingrRepo,
+	}
 }
 
-func (it *RecipeService) Create(ctx context.Context, recipe *model.Recipe) error {
+func (s *RecipeService) CreateWithIngredients(ctx context.Context, recipe *model.Recipe, ingredients []model.RecipeIngredient) error {
 	if recipe.ID == "" {
 		recipe.ID = uuid.V7().String()
 	}
+	recipe.CreatedAt = time.Now()
 
-	return it.repo.Create(ctx, recipe)
+	tx, err := s.recipeRepo.BeginTx(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	// Сохраняем сам рецепт
+	if err := s.recipeRepo.CreateWithTx(ctx, tx, recipe); err != nil {
+		return err
+	}
+
+	// Сохраняем ингредиенты
+	for _, ing := range ingredients {
+		ing.RecipeID = recipe.ID
+		if err := s.recipeIngrRepo.AddWithTx(ctx, tx, &ing); err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit()
 }
 
-func (it *RecipeService) GetByID(ctx context.Context, id string) (*model.RecipeCategoryIngredients, error) {
-	return it.repo.GetByID(ctx, id)
+func (s *RecipeService) GetByID(ctx context.Context, id string) (*model.RecipeCategoryIngredients, error) {
+	return s.recipeRepo.GetByID(ctx, id)
 }
 
-func (it *RecipeService) GetAll(ctx context.Context) ([]model.RecipeCategoryIngredients, error) {
-	return it.repo.GetAll(ctx)
+func (s *RecipeService) GetAll(ctx context.Context) ([]model.RecipeCategoryIngredients, error) {
+	return s.recipeRepo.GetAll(ctx)
 }
 
-func (it *RecipeService) Update(ctx context.Context, recipe *model.Recipe) error {
-	return it.repo.Update(ctx, recipe)
+func (s *RecipeService) Update(ctx context.Context, recipe *model.Recipe) error {
+	return s.recipeRepo.Update(ctx, recipe)
 }
 
-func (it *RecipeService) Delete(ctx context.Context, id string) error {
-	return it.repo.Delete(ctx, id)
+func (s *RecipeService) Delete(ctx context.Context, id string) error {
+	return s.recipeRepo.Delete(ctx, id)
 }

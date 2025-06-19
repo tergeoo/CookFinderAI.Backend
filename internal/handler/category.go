@@ -25,7 +25,7 @@ func NewCategoryHandler(r *gin.Engine, svc *service.CategoryService) {
 }
 
 // GetAll godoc
-// @Summary Get all categories
+// @Summary GetAll all categories
 // @Tags Categories
 // @Produce json
 // @Success 200 {array} dto.Category
@@ -48,7 +48,7 @@ func (h *CategoryHandler) GetAll(c *gin.Context) {
 }
 
 // GetByID godoc
-// @Summary Get category by ID
+// @Summary GetAll category by ID
 // @Tags Categories
 // @Produce json
 // @Param id path string true "Category ID"

@@ -1,4 +1,4 @@
-package repository
+package repo
 
 import (
 	"CookFinder.Backend/internal/model"
@@ -22,8 +22,8 @@ func NewIngredientRepository(db *sqlx.DB) *IngredientRepository {
 
 func (it *IngredientRepository) Create(ctx context.Context, ingredient *model.Ingredient) error {
 	query, args, err := it.sb.Insert("ingredients").
-		Columns("id", "name").
-		Values(ingredient.ID, ingredient.Name).
+		Columns("id", "name", "image_url").
+		Values(ingredient.ID, ingredient.Name, ingredient.ImageUrl).
 		Suffix("ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name").
 		ToSql()
 	if err != nil {

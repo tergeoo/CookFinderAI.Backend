@@ -25,7 +25,7 @@ func NewIngredientHandler(r *gin.Engine, svc *service.IngredientService) {
 }
 
 // GetAll godoc
-// @Summary Get all ingredients
+// @Summary GetAll all ingredients
 // @Tags IngredientIDs
 // @Produce json
 // @Success 200 {array} model.Ingredient
@@ -38,7 +38,7 @@ func (h *IngredientHandler) GetAll(c *gin.Context) {
 		return
 	}
 
-	results := make([]dto.Ingredient, 0, len(ingredients))
+	results := make([]dto.IngredientResponse, 0, len(ingredients))
 
 	for _, ing := range ingredients {
 		results = append(results, *dto.NewIngredientFromModel(&ing))
@@ -48,10 +48,10 @@ func (h *IngredientHandler) GetAll(c *gin.Context) {
 }
 
 // GetByID godoc
-// @Summary Get ingredient by ID
+// @Summary GetAll ingredient by ID
 // @Tags IngredientIDs
 // @Produce json
-// @Param id path string true "Ingredient ID"
+// @Param id path string true "IngredientRequest ID"
 // @Success 200 {object} model.Ingredient
 // @Failure 404 {object} map[string]string
 // @Router /ingredients/{id} [get]
@@ -73,7 +73,7 @@ func (h *IngredientHandler) GetByID(c *gin.Context) {
 // @Tags IngredientIDs
 // @Accept json
 // @Produce json
-// @Param ingredient body model.Ingredient true "Ingredient body"
+// @Param ingredient body model.Ingredient true "IngredientRequest body"
 // @Success 201 {object} model.Ingredient
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
@@ -99,7 +99,7 @@ func (h *IngredientHandler) Create(c *gin.Context) {
 // Delete godoc
 // @Summary Delete ingredient by ID
 // @Tags IngredientIDs
-// @Param id path string true "Ingredient ID"
+// @Param id path string true "IngredientRequest ID"
 // @Success 204
 // @Failure 500 {object} map[string]string
 // @Router /ingredients/{id} [delete]

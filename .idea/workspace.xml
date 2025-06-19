@@ -4,49 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="792a3d12-7edc-420d-a50c-d4dfad53add2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CookFinder.Backend.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cmd/api/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/app.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/handler/category.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/handler/ingredient.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/handler/recipe.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/handler/upload.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/model/category.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/model/ingredient.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/model/recipe.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/model/recipe_category_ingredients.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/repo/category.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/repo/ingredient.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/repo/recipe.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/category.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/ingredient.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/internal/service/recipe.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/embed.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/db/datasource.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/db/utils.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/dto/category.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/dto/ingredient.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/dto/recipe.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/logger/logger.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/puberr/puberr.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/rest/mdw/common.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/rest/mdw/cors.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/rest/mdw/json.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/rest/mdw/metrics.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/rest/mdw/realip.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/rest/params_utils.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/rest/response.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/rest/utils.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pkg/uuid/uuid.go" afterDir="false" />
+    <list default="true" id="792a3d12-7edc-420d-a50c-d4dfad53add2" name="Changes" comment="init">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,14 +120,245 @@
       <updated>1749971551577</updated>
       <workItem from="1749971552609" duration="312000" />
       <workItem from="1749971960550" duration="13058000" />
-      <workItem from="1750146940566" duration="3188000" />
+      <workItem from="1750146940566" duration="9526000" />
     </task>
+    <task id="LOCAL-00001" summary="init">
+      <option name="closed" value="true" />
+      <created>1750238256245</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1750238256245</updated>
+    </task>
+    <task id="LOCAL-00002" summary="init">
+      <option name="closed" value="true" />
+      <created>1750238389225</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1750238389225</updated>
+    </task>
+    <task id="LOCAL-00003" summary="init">
+      <option name="closed" value="true" />
+      <created>1750238729326</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1750238729326</updated>
+    </task>
+    <task id="LOCAL-00004" summary="init">
+      <option name="closed" value="true" />
+      <created>1750238955267</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1750238955267</updated>
+    </task>
+    <task id="LOCAL-00005" summary="init">
+      <option name="closed" value="true" />
+      <created>1750239233417</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1750239233417</updated>
+    </task>
+    <task id="LOCAL-00006" summary="init">
+      <option name="closed" value="true" />
+      <created>1750239619870</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1750239619870</updated>
+    </task>
+    <task id="LOCAL-00007" summary="init">
+      <option name="closed" value="true" />
+      <created>1750239774123</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1750239774123</updated>
+    </task>
+    <task id="LOCAL-00008" summary="init">
+      <option name="closed" value="true" />
+      <created>1750239830582</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1750239830582</updated>
+    </task>
+    <task id="LOCAL-00009" summary="init">
+      <option name="closed" value="true" />
+      <created>1750241132742</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1750241132742</updated>
+    </task>
+    <task id="LOCAL-00010" summary="init">
+      <option name="closed" value="true" />
+      <created>1750241235331</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1750241235331</updated>
+    </task>
+    <task id="LOCAL-00011" summary="init">
+      <option name="closed" value="true" />
+      <created>1750241429194</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1750241429194</updated>
+    </task>
+    <task id="LOCAL-00012" summary="init">
+      <option name="closed" value="true" />
+      <created>1750241596291</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1750241596291</updated>
+    </task>
+    <task id="LOCAL-00013" summary="init">
+      <option name="closed" value="true" />
+      <created>1750241723186</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1750241723186</updated>
+    </task>
+    <task id="LOCAL-00014" summary="init">
+      <option name="closed" value="true" />
+      <created>1750241827328</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1750241827328</updated>
+    </task>
+    <task id="LOCAL-00015" summary="init">
+      <option name="closed" value="true" />
+      <created>1750241938421</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1750241938421</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init" />
+    <option name="LAST_COMMIT_MESSAGE" value="init" />
+  </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="com.gk646.codestats.settings.Save">
+    <option name="commitTimePoints">
+      <list>
+        <TimePoint>
+          <option name="timestamp" value="1750238256272" />
+          <option name="linesCode" value="2714" />
+          <option name="totalLines" value="4021" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750238389259" />
+          <option name="linesCode" value="2714" />
+          <option name="totalLines" value="4021" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750238729350" />
+          <option name="linesCode" value="2716" />
+          <option name="totalLines" value="4024" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750238955304" />
+          <option name="linesCode" value="2716" />
+          <option name="totalLines" value="4024" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750239233437" />
+          <option name="linesCode" value="2716" />
+          <option name="totalLines" value="4024" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750239619898" />
+          <option name="linesCode" value="2716" />
+          <option name="totalLines" value="4024" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750239774145" />
+          <option name="linesCode" value="2718" />
+          <option name="totalLines" value="4028" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750239830606" />
+          <option name="linesCode" value="2718" />
+          <option name="totalLines" value="4028" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750241132777" />
+          <option name="linesCode" value="2718" />
+          <option name="totalLines" value="4028" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750241235367" />
+          <option name="linesCode" value="2718" />
+          <option name="totalLines" value="4028" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750241429227" />
+          <option name="linesCode" value="2718" />
+          <option name="totalLines" value="4028" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750241596322" />
+          <option name="linesCode" value="2718" />
+          <option name="totalLines" value="4028" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750241723204" />
+          <option name="linesCode" value="2718" />
+          <option name="totalLines" value="4028" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750241827346" />
+          <option name="linesCode" value="2718" />
+          <option name="totalLines" value="4028" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750241938451" />
+          <option name="linesCode" value="2718" />
+          <option name="totalLines" value="4028" />
+          <option name="info" value="init" />
+        </TimePoint>
+      </list>
+    </option>
+    <option name="genericTimePoints">
+      <list>
+        <TimePoint>
+          <option name="timestamp" value="1750241938451" />
+          <option name="linesCode" value="2718" />
+          <option name="totalLines" value="4028" />
+          <option name="info" value="18 июн. 2025 г." />
+        </TimePoint>
+      </list>
+    </option>
   </component>
 </project>

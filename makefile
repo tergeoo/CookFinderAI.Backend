@@ -34,6 +34,9 @@ gen-mocks:
 bench:
 	go test -bench=. -benchmem -cpu=4 -run=^# ./...
 
+run-api:
+	set -a && source .env && set +a && go run cmd/api/main.go
+
 build-api:
 	make _build SERVICE=api
 

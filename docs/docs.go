@@ -23,7 +23,7 @@ const docTemplate = `{
                 "tags": [
                     "Categories"
                 ],
-                "summary": "Get all categories",
+                "summary": "GetAll all categories",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -103,7 +103,7 @@ const docTemplate = `{
                 "tags": [
                     "Categories"
                 ],
-                "summary": "Get category by ID",
+                "summary": "GetAll category by ID",
                 "parameters": [
                     {
                         "type": "string",
@@ -167,6 +167,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/files": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Files"
+                ],
+                "summary": "GetAll files",
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/ingredients": {
             "get": {
                 "produces": [
@@ -175,7 +203,7 @@ const docTemplate = `{
                 "tags": [
                     "IngredientIDs"
                 ],
-                "summary": "Get all ingredients",
+                "summary": "GetAll all ingredients",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -210,7 +238,7 @@ const docTemplate = `{
                 "summary": "Create a new ingredient",
                 "parameters": [
                     {
-                        "description": "Ingredient body",
+                        "description": "IngredientRequest body",
                         "name": "ingredient",
                         "in": "body",
                         "required": true,
@@ -255,11 +283,11 @@ const docTemplate = `{
                 "tags": [
                     "IngredientIDs"
                 ],
-                "summary": "Get ingredient by ID",
+                "summary": "GetAll ingredient by ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Ingredient ID",
+                        "description": "IngredientRequest ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -291,7 +319,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Ingredient ID",
+                        "description": "IngredientRequest ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -353,15 +381,15 @@ const docTemplate = `{
                 "tags": [
                     "Recipes"
                 ],
-                "summary": "Create a new recipe",
+                "summary": "Create a new recipe with ingredients",
                 "parameters": [
                     {
-                        "description": "RecipeResponse body",
+                        "description": "Recipe data",
                         "name": "recipe",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.RecipeResponse"
+                            "$ref": "#/definitions/dto.RecipeRequest"
                         }
                     }
                 ],
@@ -405,7 +433,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "RecipeResponse ID",
+                        "description": "Recipe ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -443,18 +471,18 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "RecipeResponse ID",
+                        "description": "Recipe ID",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "RecipeResponse body",
+                        "description": "Recipe data",
                         "name": "recipe",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.RecipeResponse"
+                            "$ref": "#/definitions/dto.RecipeRequest"
                         }
                     }
                 ],
@@ -496,7 +524,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "RecipeResponse ID",
+                        "description": "Recipe ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -530,7 +558,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Upload"
+                    "Files"
                 ],
                 "summary": "Upload image file",
                 "parameters": [
@@ -589,13 +617,67 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.Ingredient": {
+        "dto.RecipeIngredientRequest": {
             "type": "object",
             "properties": {
+                "amount": {
+                    "type": "integer"
+                },
                 "id": {
+                    "description": "ingredient_id",
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.RecipeIngredientResponse": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "ingredient_id",
+                    "type": "string"
+                },
+                "image_url": {
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.RecipeRequest": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string"
+                },
+                "cook_time_min": {
+                    "type": "integer"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "ingredients": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.RecipeIngredientRequest"
+                    }
+                },
+                "method": {
+                    "type": "string"
+                },
+                "prep_time_min": {
+                    "type": "integer"
+                },
+                "title": {
                     "type": "string"
                 }
             }
@@ -621,7 +703,7 @@ const docTemplate = `{
                 "ingredients": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dto.Ingredient"
+                        "$ref": "#/definitions/dto.RecipeIngredientResponse"
                     }
                 },
                 "method": {
@@ -639,6 +721,9 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
+                    "type": "string"
+                },
+                "imageUrl": {
                     "type": "string"
                 },
                 "name": {
