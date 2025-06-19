@@ -28,6 +28,7 @@ func NewFileHandler(
 	}
 	r.POST("/upload", h.Upload)
 	r.GET("/files", h.GetAll)
+	r.DELETE("/files/:id", h.Delete)
 	r.Static("/static", "./uploads")
 }
 
