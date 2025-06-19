@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -90,6 +91,42 @@ func (it *FileHandler) GetAll(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"files": files})
+}
+
+// Delete godoc
+// @Summary Delete by id
+// @Tags Files
+// @Param id path string true "File id"
+// @Success 204
+// @Failure 500 {object} map[string]string
+// @Router /files/{id} [delete]
+func (it *FileHandler) Delete(c *gin.Context) {
+	id := c.Param("id")
+
+	// Получаем метаинформацию о файле из БД
+	f, err := it.fileService.GetFileByID(c, id)
+	if err != nil {
+		slog.Error("failed to get file", "error", err)
+		c.JSON(http.StatusNotFound, gin.H{"error": "file not found"})
+		return
+	}
+
+	// Удаляем сам файл с диска
+	filePath := filepath.Join("uploads", filepath.Base(f.Path)) // безопасное соединение пути
+	if err := os.Remove(filePath); err != nil && !os.IsNotExist(err) {
+		slog.Error("failed to delete file from disk", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete file"})
+		return
+	}
+
+	// Удаляем метаинформацию из БД
+	if err := it.fileService.DeleteFile(c, id); err != nil {
+		slog.Error("failed to delete file metadata", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete file metadata"})
+		return
+	}
+
+	c.Status(http.StatusNoContent)
 }
 
 func sanitizeFilename(name string) string {

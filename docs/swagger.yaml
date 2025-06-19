@@ -203,6 +203,26 @@ paths:
       summary: GetAll files
       tags:
       - Files
+  /files/{id}:
+    delete:
+      parameters:
+      - description: File id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete by id
+      tags:
+      - Files
   /ingredients:
     get:
       produces:

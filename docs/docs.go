@@ -195,6 +195,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/files/{id}": {
+            "delete": {
+                "tags": [
+                    "Files"
+                ],
+                "summary": "Delete by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "File id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/ingredients": {
             "get": {
                 "produces": [
