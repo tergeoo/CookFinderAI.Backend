@@ -34,3 +34,7 @@ func (s *CategoryService) GetByID(ctx context.Context, id string) (*model.Catego
 func (s *CategoryService) Delete(ctx context.Context, id string) error {
 	return s.repo.Delete(ctx, id)
 }
+
+func (s *CategoryService) Update(ctx context.Context, category *model.Category) error {
+	return s.repo.Update(ctx, category)
+}

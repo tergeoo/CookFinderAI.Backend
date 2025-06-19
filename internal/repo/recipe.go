@@ -86,7 +86,7 @@ func (r *RecipeRepository) GetByID(ctx context.Context, id string) (*model.Recip
 		Category: model.Category{
 			ID:       row.CategoryID,
 			Name:     row.CategoryName,
-			ImageURL: row.CategoryImageURL,
+			ImageUrl: row.CategoryImageURL,
 		},
 		Ingredients: ingredients,
 	}, nil
@@ -128,7 +128,7 @@ func (r *RecipeRepository) GetAll(ctx context.Context) ([]model.RecipeCategoryIn
 			Category: model.Category{
 				ID:       row.CategoryID,
 				Name:     row.CategoryName,
-				ImageURL: row.CategoryImageURL,
+				ImageUrl: row.CategoryImageURL,
 			},
 			Ingredients: ingredients,
 		})

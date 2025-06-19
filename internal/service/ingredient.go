@@ -27,6 +27,10 @@ func (s *IngredientService) GetByID(ctx context.Context, id string) (*model.Ingr
 	return s.repo.GetByID(ctx, id)
 }
 
+func (s *IngredientService) Update(ctx context.Context, model *model.Ingredient) error {
+	return s.repo.Update(ctx, model)
+}
+
 func (s *IngredientService) GetAll(ctx context.Context) ([]model.Ingredient, error) {
 	return s.repo.GetAll(ctx)
 }

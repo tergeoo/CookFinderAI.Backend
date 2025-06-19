@@ -12,6 +12,6 @@ func NewCategoryFromModel(category *model.Category) *Category {
 	return &Category{
 		ID:       category.ID,
 		Name:     category.Name,
-		ImageURL: category.ImageURL,
+		ImageURL: category.ImageUrl,
 	}
 }

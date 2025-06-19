@@ -3,6 +3,7 @@ package dto
 import "CookFinder.Backend/internal/model"
 
 type IngredientRequest struct {
+	ID       string `json:"id"`
 	Name     string `json:"name"`
 	ImageUrl string `json:"image_url"`
 }

@@ -20,15 +20,16 @@ func NewIngredientHandler(r *gin.Engine, svc *service.IngredientService) {
 		routes.GET("", h.GetAll)
 		routes.GET(":id", h.GetByID)
 		routes.POST("", h.Create)
+		routes.PUT(":id", h.Update)
 		routes.DELETE(":id", h.Delete)
 	}
 }
 
 // GetAll godoc
-// @Summary GetAll all ingredients
+// @Summary Get all ingredients
 // @Tags IngredientIDs
 // @Produce json
-// @Success 200 {array} model.Ingredient
+// @Success 200 {array} dto.IngredientResponse
 // @Failure 500 {object} map[string]string
 // @Router /ingredients [get]
 func (h *IngredientHandler) GetAll(c *gin.Context) {
@@ -39,7 +40,6 @@ func (h *IngredientHandler) GetAll(c *gin.Context) {
 	}
 
 	results := make([]dto.IngredientResponse, 0, len(ingredients))
-
 	for _, ing := range ingredients {
 		results = append(results, *dto.NewIngredientFromModel(&ing))
 	}
@@ -48,11 +48,11 @@ func (h *IngredientHandler) GetAll(c *gin.Context) {
 }
 
 // GetByID godoc
-// @Summary GetAll ingredient by ID
+// @Summary Get ingredient by ID
 // @Tags IngredientIDs
 // @Produce json
-// @Param id path string true "IngredientRequest ID"
-// @Success 200 {object} model.Ingredient
+// @Param id path string true "Ingredient ID"
+// @Success 200 {object} dto.IngredientResponse
 // @Failure 404 {object} map[string]string
 // @Router /ingredients/{id} [get]
 func (h *IngredientHandler) GetByID(c *gin.Context) {
@@ -62,10 +62,7 @@ func (h *IngredientHandler) GetByID(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
 		return
 	}
-
-	result := dto.NewIngredientFromModel(ingredient)
-
-	c.JSON(http.StatusOK, result)
+	c.JSON(http.StatusOK, dto.NewIngredientFromModel(ingredient))
 }
 
 // Create godoc
@@ -73,34 +70,68 @@ func (h *IngredientHandler) GetByID(c *gin.Context) {
 // @Tags IngredientIDs
 // @Accept json
 // @Produce json
-// @Param ingredient body model.Ingredient true "IngredientRequest body"
-// @Success 201 {object} model.Ingredient
+// @Param ingredient body dto.IngredientRequest true "Ingredient body"
+// @Success 201 {object} dto.IngredientResponse
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /ingredients [post]
 func (h *IngredientHandler) Create(c *gin.Context) {
-	var input model.Ingredient
+	var input dto.IngredientRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	result := &model.Ingredient{
+	ingredient := &model.Ingredient{
 		Name:     input.Name,
 		ImageUrl: input.ImageUrl,
 	}
 
-	if err := h.service.Create(c.Request.Context(), result); err != nil {
+	if err := h.service.Create(c.Request.Context(), ingredient); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, result)
+
+	c.JSON(http.StatusCreated, dto.NewIngredientFromModel(ingredient))
+}
+
+// Update godoc
+// @Summary Update ingredient by ID
+// @Tags IngredientIDs
+// @Accept json
+// @Produce json
+// @Param id path string true "Ingredient ID"
+// @Param ingredient body dto.IngredientRequest true "Ingredient body"
+// @Success 200 {object} dto.IngredientResponse
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /ingredients/{id} [put]
+func (h *IngredientHandler) Update(c *gin.Context) {
+	var input dto.IngredientRequest
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ingredient := &model.Ingredient{
+		ID:       input.ID,
+		Name:     input.Name,
+		ImageUrl: input.ImageUrl,
+	}
+
+	if err := h.service.Update(c.Request.Context(), ingredient); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, dto.NewIngredientFromModel(ingredient))
 }
 
 // Delete godoc
 // @Summary Delete ingredient by ID
 // @Tags IngredientIDs
-// @Param id path string true "IngredientRequest ID"
+// @Param id path string true "Ingredient ID"
 // @Success 204
 // @Failure 500 {object} map[string]string
 // @Router /ingredients/{id} [delete]

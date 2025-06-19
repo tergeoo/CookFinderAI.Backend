@@ -23,7 +23,7 @@ func NewCategoryRepository(db *sqlx.DB) *CategoryRepository {
 func (it *CategoryRepository) Create(ctx context.Context, category *model.Category) error {
 	query, args, err := it.sb.Insert("recipe_categories").
 		Columns("id", "name", "image_url").
-		Values(category.ID, category.Name, category.ImageURL).
+		Values(category.ID, category.Name, category.ImageUrl).
 		Suffix("ON CONFLICT (name) DO UPDATE SET image_url = EXCLUDED.image_url").
 		ToSql()
 	if err != nil {
@@ -68,6 +68,19 @@ func (it *CategoryRepository) Delete(ctx context.Context, id string) error {
 	query, args, err := it.sb.
 		Delete("recipe_categories").
 		Where(squirrel.Eq{"id": id}).
+		ToSql()
+	if err != nil {
+		return err
+	}
+	_, err = it.db.ExecContext(ctx, query, args...)
+	return err
+}
+
+func (it *CategoryRepository) Update(ctx context.Context, category *model.Category) error {
+	query, args, err := it.sb.Update("ingredients").
+		Set("name", category.Name).
+		Set("image_url", category.ImageUrl).
+		Where(squirrel.Eq{"id": category.ID}).
 		ToSql()
 	if err != nil {
 		return err

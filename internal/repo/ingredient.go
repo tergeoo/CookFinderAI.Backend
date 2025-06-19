@@ -58,6 +58,19 @@ func (it *IngredientRepository) GetAllByID(ctx context.Context, id string) ([]mo
 	return ingredients, err
 }
 
+func (it *IngredientRepository) Update(ctx context.Context, ingredient *model.Ingredient) error {
+	query, args, err := it.sb.Update("ingredients").
+		Set("name", ingredient.Name).
+		Set("image_url", ingredient.ImageUrl).
+		Where(squirrel.Eq{"id": ingredient.ID}).
+		ToSql()
+	if err != nil {
+		return err
+	}
+	_, err = it.db.ExecContext(ctx, query, args...)
+	return err
+}
+
 func (it *IngredientRepository) GetAll(ctx context.Context) ([]model.Ingredient, error) {
 	query, args, err := it.sb.Select("*").
 		From("ingredients").

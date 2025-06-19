@@ -21,6 +21,7 @@ func NewCategoryHandler(r *gin.Engine, svc *service.CategoryService) {
 		routes.GET(":id", h.GetByID)
 		routes.POST("", h.Create)
 		routes.DELETE(":id", h.Delete)
+		routes.PUT("", h.Update)
 	}
 }
 
@@ -86,7 +87,7 @@ func (h *CategoryHandler) Create(c *gin.Context) {
 
 	rc := &model.Category{
 		Name:     input.Name,
-		ImageURL: input.ImageURL,
+		ImageUrl: input.ImageURL,
 	}
 
 	if err := h.service.Create(c.Request.Context(), rc); err != nil {
@@ -94,6 +95,37 @@ func (h *CategoryHandler) Create(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, input)
+}
+
+// Update godoc
+// @Summary Update a new category
+// @Tags Categories
+// @Accept json
+// @Produce json
+// @Param category body dto.Category true "Category body"
+// @Success 201 {object} dto.Category
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /categories [post]
+func (h *CategoryHandler) Update(c *gin.Context) {
+	var input dto.Category
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	rc := &model.Category{
+		ID:       input.ID,
+		Name:     input.Name,
+		ImageUrl: input.ImageURL,
+	}
+
+	if err := h.service.Update(c.Request.Context(), rc); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.Status(http.StatusNoContent)
 }
 
 // Delete godoc
