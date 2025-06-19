@@ -42,7 +42,7 @@ func (r *FileRepository) GetAll(ctx context.Context) ([]model.File, error) {
 		return nil, err
 	}
 
-	var files []model.File
+	files := make([]model.File, 0, 0)
 	err = r.db.SelectContext(ctx, &files, query, args...)
 	return files, err
 }
