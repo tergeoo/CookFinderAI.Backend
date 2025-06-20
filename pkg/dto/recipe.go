@@ -55,6 +55,9 @@ func NewRecipeResponseFromModel(recipe *model.RecipeCategoryIngredients) *Recipe
 		Method:      recipe.Recipe.Method,
 		CreatedAt:   recipe.Recipe.CreatedAt,
 		ImageURL:    recipe.Recipe.ImageURL,
+		Energy:      recipe.Recipe.Energy,
+		Fat:         recipe.Recipe.Fat,
+		Protein:     recipe.Recipe.Protein,
 		Category:    category,
 		Ingredients: ingredients,
 	}
