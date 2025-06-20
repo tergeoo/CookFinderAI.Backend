@@ -66,3 +66,31 @@ func (s *RecipeService) Update(ctx context.Context, recipe *model.Recipe) error 
 func (s *RecipeService) Delete(ctx context.Context, id string) error {
 	return s.recipeRepo.Delete(ctx, id)
 }
+
+func (s *RecipeService) UpdateWithIngredients(ctx context.Context, recipe *model.Recipe, ingredients []model.RecipeIngredient) error {
+	tx, err := s.recipeRepo.BeginTx(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	// Обновляем рецепт
+	if err := s.recipeRepo.UpdateWithTx(ctx, tx, recipe); err != nil {
+		return err
+	}
+
+	// Удаляем старые ингредиенты
+	if err := s.recipeIngrRepo.DeleteByRecipeIDWithTx(ctx, tx, recipe.ID); err != nil {
+		return err
+	}
+
+	// Добавляем новые ингредиенты
+	for _, ing := range ingredients {
+		ing.RecipeID = recipe.ID
+		if err := s.recipeIngrRepo.AddWithTx(ctx, tx, &ing); err != nil {
+			return err
+		}
+	}
+
+	return tx.Commit()
+}

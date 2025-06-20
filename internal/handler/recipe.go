@@ -132,8 +132,50 @@ func (h *RecipeHandler) Create(c *gin.Context) {
 // @Failure 500 {object} map[string]string
 // @Router /recipes/{id} [put]
 func (h *RecipeHandler) Update(c *gin.Context) {
-	c.JSON(http.StatusNotImplemented, gin.H{"error": "not implemented yet"})
-	// Можно реализовать полную логику аналогично Create, с удалением старых ингредиентов и заменой на новые
+	id := c.Param("id")
+
+	var input dto.RecipeRequest
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Проверим, существует ли рецепт
+	existing, err := h.service.GetByID(c.Request.Context(), id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "recipe not found"})
+		return
+	}
+
+	// Обновлённые данные рецепта
+	updated := &model.Recipe{
+		ID:          id,
+		Title:       input.Title,
+		CategoryID:  input.CategoryID,
+		PrepTimeMin: input.PrepTimeMin,
+		CookTimeMin: input.CookTimeMin,
+		Method:      input.Method,
+		ImageURL:    input.ImageURL,
+		CreatedAt:   existing.Recipe.CreatedAt,
+	}
+
+	// Новые ингредиенты
+	ingredients := make([]model.RecipeIngredient, len(input.Ingredients))
+	for i, ing := range input.Ingredients {
+		ingredients[i] = model.RecipeIngredient{
+			IngredientID: ing.ID,
+			Amount:       ing.Amount,
+			Unit:         ing.Unit,
+		}
+	}
+
+	// Обновление рецепта и его ингредиентов
+	if err := h.service.UpdateWithIngredients(c.Request.Context(), updated, ingredients); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.Status(http.StatusNoContent)
 }
 
 // Delete godoc

@@ -9,18 +9,18 @@ import (
 
 type RecipeIngredientRepository struct {
 	db *sqlx.DB
-	sb squirrel.StatementBuilderType
+	sq squirrel.StatementBuilderType
 }
 
 func NewRecipeIngredientRepository(db *sqlx.DB) *RecipeIngredientRepository {
 	return &RecipeIngredientRepository{
 		db: db,
-		sb: squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar),
+		sq: squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar),
 	}
 }
 
-func (r *RecipeIngredientRepository) Add(ctx context.Context, ri *model.RecipeIngredient) error {
-	query, args, err := r.sb.Insert("recipe_ingredients").
+func (it *RecipeIngredientRepository) Add(ctx context.Context, ri *model.RecipeIngredient) error {
+	query, args, err := it.sq.Insert("recipe_ingredients").
 		Columns("recipe_id", "ingredient_id", "amount", "unit").
 		Values(ri.RecipeID, ri.IngredientID, ri.Amount, ri.Unit).
 		Suffix("ON CONFLICT (recipe_id, ingredient_id) DO UPDATE SET amount = EXCLUDED.amount, unit = EXCLUDED.unit").
@@ -28,13 +28,13 @@ func (r *RecipeIngredientRepository) Add(ctx context.Context, ri *model.RecipeIn
 	if err != nil {
 		return err
 	}
-	_, err = r.db.ExecContext(ctx, query, args...)
+	_, err = it.db.ExecContext(ctx, query, args...)
 	return err
 }
 
 // ✅ Новый метод AddWithTx
-func (r *RecipeIngredientRepository) AddWithTx(ctx context.Context, tx *sqlx.Tx, ri *model.RecipeIngredient) error {
-	query, args, err := r.sb.Insert("recipe_ingredients").
+func (it *RecipeIngredientRepository) AddWithTx(ctx context.Context, tx *sqlx.Tx, ri *model.RecipeIngredient) error {
+	query, args, err := it.sq.Insert("recipe_ingredients").
 		Columns("recipe_id", "ingredient_id", "amount", "unit").
 		Values(ri.RecipeID, ri.IngredientID, ri.Amount, ri.Unit).
 		Suffix("ON CONFLICT (recipe_id, ingredient_id) DO UPDATE SET amount = EXCLUDED.amount, unit = EXCLUDED.unit").
@@ -46,8 +46,8 @@ func (r *RecipeIngredientRepository) AddWithTx(ctx context.Context, tx *sqlx.Tx,
 	return err
 }
 
-func (r *RecipeIngredientRepository) GetByRecipeID(ctx context.Context, recipeID string) ([]model.RecipeIngredient, error) {
-	query, args, err := r.sb.Select("*").
+func (it *RecipeIngredientRepository) GetByRecipeID(ctx context.Context, recipeID string) ([]model.RecipeIngredient, error) {
+	query, args, err := it.sq.Select("*").
 		From("recipe_ingredients").
 		Where(squirrel.Eq{"recipe_id": recipeID}).
 		ToSql()
@@ -56,17 +56,32 @@ func (r *RecipeIngredientRepository) GetByRecipeID(ctx context.Context, recipeID
 	}
 
 	var result []model.RecipeIngredient
-	err = r.db.SelectContext(ctx, &result, query, args...)
+	err = it.db.SelectContext(ctx, &result, query, args...)
 	return result, err
 }
 
-func (r *RecipeIngredientRepository) DeleteByRecipeID(ctx context.Context, recipeID string) error {
-	query, args, err := r.sb.Delete("recipe_ingredients").
+func (it *RecipeIngredientRepository) DeleteByRecipeID(ctx context.Context, recipeID string) error {
+	query, args, err := it.sq.Delete("recipe_ingredients").
 		Where(squirrel.Eq{"recipe_id": recipeID}).
 		ToSql()
 	if err != nil {
 		return err
 	}
-	_, err = r.db.ExecContext(ctx, query, args...)
+	_, err = it.db.ExecContext(ctx, query, args...)
+	return err
+}
+
+func (it *RecipeIngredientRepository) DeleteByRecipeIDWithTx(ctx context.Context, tx *sqlx.Tx, recipeID string) error {
+	queryBuilder := it.sq.
+		Delete("recipe_ingredients").
+		Where(squirrel.Eq{"recipe_id": recipeID}).
+		PlaceholderFormat(squirrel.Dollar)
+
+	query, args, err := queryBuilder.ToSql()
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, query, args...)
 	return err
 }

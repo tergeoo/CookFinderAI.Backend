@@ -12,22 +12,22 @@ import (
 
 type RecipeRepository struct {
 	db *sqlx.DB
-	sb squirrel.StatementBuilderType
+	sq squirrel.StatementBuilderType
 }
 
 func NewRecipeRepository(db *sqlx.DB) *RecipeRepository {
 	return &RecipeRepository{
 		db: db,
-		sb: squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar),
+		sq: squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar),
 	}
 }
 
-func (r *RecipeRepository) BeginTx(ctx context.Context) (*sqlx.Tx, error) {
-	return r.db.BeginTxx(ctx, nil)
+func (it *RecipeRepository) BeginTx(ctx context.Context) (*sqlx.Tx, error) {
+	return it.db.BeginTxx(ctx, nil)
 }
 
-func (r *RecipeRepository) Create(ctx context.Context, recipe *model.Recipe) error {
-	query, args, err := r.sb.
+func (it *RecipeRepository) Create(ctx context.Context, recipe *model.Recipe) error {
+	query, args, err := it.sq.
 		Insert("recipes").
 		Columns("id", "title", "category_id", "prep_time_min", "cook_time_min", "method", "created_at", "image_url").
 		Values(recipe.ID, recipe.Title, recipe.CategoryID, recipe.PrepTimeMin, recipe.CookTimeMin, recipe.Method, recipe.CreatedAt, recipe.ImageURL).
@@ -35,12 +35,12 @@ func (r *RecipeRepository) Create(ctx context.Context, recipe *model.Recipe) err
 	if err != nil {
 		return err
 	}
-	_, err = r.db.ExecContext(ctx, query, args...)
+	_, err = it.db.ExecContext(ctx, query, args...)
 	return err
 }
 
-func (r *RecipeRepository) CreateWithTx(ctx context.Context, tx *sqlx.Tx, recipe *model.Recipe) error {
-	query, args, err := r.sb.
+func (it *RecipeRepository) CreateWithTx(ctx context.Context, tx *sqlx.Tx, recipe *model.Recipe) error {
+	query, args, err := it.sq.
 		Insert("recipes").
 		Columns("id", "title", "category_id", "prep_time_min", "cook_time_min", "method", "created_at", "image_url").
 		Values(recipe.ID, recipe.Title, recipe.CategoryID, recipe.PrepTimeMin, recipe.CookTimeMin, recipe.Method, recipe.CreatedAt, recipe.ImageURL).
@@ -52,15 +52,15 @@ func (r *RecipeRepository) CreateWithTx(ctx context.Context, tx *sqlx.Tx, recipe
 	return err
 }
 
-func (r *RecipeRepository) GetByID(ctx context.Context, id string) (*model.RecipeCategoryIngredients, error) {
-	query, args, err := r.sb.
+func (it *RecipeRepository) GetByID(ctx context.Context, id string) (*model.RecipeCategoryIngredients, error) {
+	query, args, err := it.sq.
 		Select(
-			"r.id", "r.title", "r.category_id", "r.prep_time_min", "r.cook_time_min", "r.method", "r.created_at", "r.image_url",
+			"it.id", "it.title", "it.category_id", "it.prep_time_min", "it.cook_time_min", "it.method", "it.created_at", "it.image_url",
 			"c.id AS category_id", "c.name AS category_name", "c.image_url AS category_image_url",
 		).
-		From("recipes r").
-		Join("recipe_categories c ON r.category_id = c.id").
-		Where(squirrel.Eq{"r.id": id}).
+		From("recipes it").
+		Join("recipe_categories c ON it.category_id = c.id").
+		Where(squirrel.Eq{"it.id": id}).
 		ToSql()
 	if err != nil {
 		return nil, err
@@ -72,11 +72,11 @@ func (r *RecipeRepository) GetByID(ctx context.Context, id string) (*model.Recip
 		CategoryName     string `db:"category_name"`
 		CategoryImageURL string `db:"category_image_url"`
 	}
-	if err := r.db.GetContext(ctx, &row, query, args...); err != nil {
+	if err := it.db.GetContext(ctx, &row, query, args...); err != nil {
 		return nil, err
 	}
 
-	ingredients, err := r.getIngredientsByRecipeID(ctx, id)
+	ingredients, err := it.getIngredientsByRecipeID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -92,15 +92,15 @@ func (r *RecipeRepository) GetByID(ctx context.Context, id string) (*model.Recip
 	}, nil
 }
 
-func (r *RecipeRepository) GetAll(ctx context.Context) ([]model.RecipeCategoryIngredients, error) {
-	query, args, err := r.sb.
+func (it *RecipeRepository) GetAll(ctx context.Context) ([]model.RecipeCategoryIngredients, error) {
+	query, args, err := it.sq.
 		Select(
-			"r.id", "r.title", "r.category_id", "r.prep_time_min", "r.cook_time_min", "r.method", "r.created_at", "r.image_url",
+			"it.id", "it.title", "it.category_id", "it.prep_time_min", "it.cook_time_min", "it.method", "it.created_at", "it.image_url",
 			"c.id AS category_id", "c.name AS category_name", "c.image_url AS category_image_url",
 		).
-		From("recipes r").
-		Join("recipe_categories c ON r.category_id = c.id").
-		OrderBy("r.created_at DESC").
+		From("recipes it").
+		Join("recipe_categories c ON it.category_id = c.id").
+		OrderBy("it.created_at DESC").
 		ToSql()
 	if err != nil {
 		return nil, err
@@ -112,13 +112,13 @@ func (r *RecipeRepository) GetAll(ctx context.Context) ([]model.RecipeCategoryIn
 		CategoryName     string `db:"category_name"`
 		CategoryImageURL string `db:"category_image_url"`
 	}
-	if err := r.db.SelectContext(ctx, &rows, query, args...); err != nil {
+	if err := it.db.SelectContext(ctx, &rows, query, args...); err != nil {
 		return nil, err
 	}
 
 	var result []model.RecipeCategoryIngredients
 	for _, row := range rows {
-		ingredients, err := r.getIngredientsByRecipeID(ctx, row.ID)
+		ingredients, err := it.getIngredientsByRecipeID(ctx, row.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -137,8 +137,8 @@ func (r *RecipeRepository) GetAll(ctx context.Context) ([]model.RecipeCategoryIn
 	return result, nil
 }
 
-func (r *RecipeRepository) getIngredientsByRecipeID(ctx context.Context, recipeID string) ([]model.IngredientWithAmount, error) {
-	query, args, err := r.sb.
+func (it *RecipeRepository) getIngredientsByRecipeID(ctx context.Context, recipeID string) ([]model.IngredientWithAmount, error) {
+	query, args, err := it.sq.
 		Select("i.id", "i.name", "i.image_url", "ri.amount", "ri.unit").
 		From("recipe_ingredients ri").
 		Join("ingredients i ON i.id = ri.ingredient_id").
@@ -149,14 +149,14 @@ func (r *RecipeRepository) getIngredientsByRecipeID(ctx context.Context, recipeI
 	}
 
 	var ingredients []model.IngredientWithAmount
-	if err := r.db.SelectContext(ctx, &ingredients, query, args...); err != nil {
+	if err := it.db.SelectContext(ctx, &ingredients, query, args...); err != nil {
 		return nil, err
 	}
 	return ingredients, nil
 }
 
-func (r *RecipeRepository) Update(ctx context.Context, recipe *model.Recipe) error {
-	query, args, err := r.sb.Update("recipes").
+func (it *RecipeRepository) Update(ctx context.Context, recipe *model.Recipe) error {
+	query, args, err := it.sq.Update("recipes").
 		Set("title", recipe.Title).
 		Set("category_id", recipe.CategoryID).
 		Set("prep_time_min", recipe.PrepTimeMin).
@@ -168,23 +168,23 @@ func (r *RecipeRepository) Update(ctx context.Context, recipe *model.Recipe) err
 	if err != nil {
 		return err
 	}
-	_, err = r.db.ExecContext(ctx, query, args...)
+	_, err = it.db.ExecContext(ctx, query, args...)
 	return err
 }
 
-func (r *RecipeRepository) Delete(ctx context.Context, id string) error {
-	query, args, err := r.sb.Delete("recipes").
+func (it *RecipeRepository) Delete(ctx context.Context, id string) error {
+	query, args, err := it.sq.Delete("recipes").
 		Where(squirrel.Eq{"id": id}).
 		ToSql()
 	if err != nil {
 		return err
 	}
-	_, err = r.db.ExecContext(ctx, query, args...)
+	_, err = it.db.ExecContext(ctx, query, args...)
 	return err
 }
 
-func (r *RecipeRepository) BatchInsert(ctx context.Context, recipes []model.Recipe) error {
-	q := r.sb.Insert("recipes").
+func (it *RecipeRepository) BatchInsert(ctx context.Context, recipes []model.Recipe) error {
+	q := it.sq.Insert("recipes").
 		Columns("id", "title", "category_id", "prep_time_min", "cook_time_min", "method", "created_at", "image_url")
 
 	for _, rec := range recipes {
@@ -198,17 +198,37 @@ func (r *RecipeRepository) BatchInsert(ctx context.Context, recipes []model.Reci
 	if err != nil {
 		return err
 	}
-	_, err = r.db.ExecContext(ctx, query, args...)
+	_, err = it.db.ExecContext(ctx, query, args...)
 	return err
 }
 
-func (r *RecipeRepository) BatchDelete(ctx context.Context, ids []string) error {
-	query, args, err := r.sb.Delete("recipes").
+func (it *RecipeRepository) BatchDelete(ctx context.Context, ids []string) error {
+	query, args, err := it.sq.Delete("recipes").
 		Where(squirrel.Eq{"id": ids}).
 		ToSql()
 	if err != nil {
 		return err
 	}
-	_, err = r.db.ExecContext(ctx, query, args...)
+	_, err = it.db.ExecContext(ctx, query, args...)
+	return err
+}
+
+func (it *RecipeRepository) UpdateWithTx(ctx context.Context, tx *sqlx.Tx, recipe *model.Recipe) error {
+	queryBuilder := it.sq.
+		Update("recipes").
+		Set("title", recipe.Title).
+		Set("category_id", recipe.CategoryID).
+		Set("prep_time_min", recipe.PrepTimeMin).
+		Set("cook_time_min", recipe.CookTimeMin).
+		Set("method", recipe.Method).
+		Set("image_url", recipe.ImageURL).
+		Where(squirrel.Eq{"id": recipe.ID})
+
+	query, args, err := queryBuilder.ToSql()
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, query, args...)
 	return err
 }
