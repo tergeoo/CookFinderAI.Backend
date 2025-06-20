@@ -1,9 +1,15 @@
 -- +goose Up
 -- +goose StatementBegin
-SELECT 'up SQL query';
+ALTER TABLE recipes
+    ADD COLUMN fat     FLOAT NOT NULL DEFAULT 0,
+    ADD COLUMN energy  INT   NOT NULL DEFAULT 0,
+    ADD COLUMN protein FLOAT NOT NULL DEFAULT 0;
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-SELECT 'down SQL query';
+ALTER TABLE recipes
+    DROP COLUMN fat,
+    DROP COLUMN energy,
+    DROP COLUMN protein;
 -- +goose StatementEnd
