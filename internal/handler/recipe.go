@@ -19,9 +19,9 @@ func NewRecipeHandler(r *gin.Engine, svc *service.RecipeService) {
 	h := &RecipeHandler{service: svc}
 	routes := r.Group("/recipes")
 	{
+		routes.POST("", h.Create)
 		routes.GET("", h.GetAll)
 		routes.GET(":id", h.GetByID)
-		routes.POST("", h.Create)
 		routes.PUT(":id", h.Update)
 		routes.DELETE(":id", h.Delete)
 	}
@@ -94,6 +94,9 @@ func (h *RecipeHandler) Create(c *gin.Context) {
 		CookTimeMin: input.CookTimeMin,
 		Method:      input.Method,
 		ImageURL:    input.ImageURL,
+		Protein:     input.Protein,
+		Fat:         input.Fat,
+		Energy:      input.Energy,
 		CreatedAt:   time.Now(),
 	}
 
@@ -156,6 +159,9 @@ func (h *RecipeHandler) Update(c *gin.Context) {
 		CookTimeMin: input.CookTimeMin,
 		Method:      input.Method,
 		ImageURL:    input.ImageURL,
+		Protein:     input.Protein,
+		Fat:         input.Fat,
+		Energy:      input.Energy,
 		CreatedAt:   existing.Recipe.CreatedAt,
 	}
 

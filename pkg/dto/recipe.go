@@ -12,6 +12,9 @@ type RecipeResponse struct {
 	CookTimeMin int                        `json:"cook_time_min"`
 	Method      string                     `json:"method"`
 	ImageURL    string                     `json:"image_url"`
+	Energy      int                        `json:"energy"`
+	Fat         float64                    `json:"fat"`
+	Protein     float64                    `json:"protein"`
 	CreatedAt   time.Time                  `json:"created_at"`
 	Category    *Category                  `json:"category"`
 	Ingredients []RecipeIngredientResponse `json:"ingredients"`
@@ -22,6 +25,9 @@ type RecipeRequest struct {
 	CategoryID  string                    `json:"category_id"`
 	PrepTimeMin int                       `json:"prep_time_min"`
 	CookTimeMin int                       `json:"cook_time_min"`
+	Energy      int                       `json:"energy"`
+	Fat         float64                   `json:"fat"`
+	Protein     float64                   `json:"protein"`
 	Method      string                    `json:"method"`
 	ImageURL    string                    `json:"image_url"`
 	Ingredients []RecipeIngredientRequest `json:"ingredients"`

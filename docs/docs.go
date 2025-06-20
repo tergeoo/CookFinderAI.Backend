@@ -55,7 +55,7 @@ const docTemplate = `{
                 "tags": [
                     "Categories"
                 ],
-                "summary": "Create a new category",
+                "summary": "Update a new category",
                 "parameters": [
                     {
                         "description": "Category body",
@@ -234,14 +234,14 @@ const docTemplate = `{
                 "tags": [
                     "IngredientIDs"
                 ],
-                "summary": "GetAll all ingredients",
+                "summary": "Get all ingredients",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Ingredient"
+                                "$ref": "#/definitions/dto.IngredientResponse"
                             }
                         }
                     },
@@ -269,12 +269,12 @@ const docTemplate = `{
                 "summary": "Create a new ingredient",
                 "parameters": [
                     {
-                        "description": "IngredientRequest body",
+                        "description": "Ingredient body",
                         "name": "ingredient",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Ingredient"
+                            "$ref": "#/definitions/dto.IngredientRequest"
                         }
                     }
                 ],
@@ -282,7 +282,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/model.Ingredient"
+                            "$ref": "#/definitions/dto.IngredientResponse"
                         }
                     },
                     "400": {
@@ -314,11 +314,11 @@ const docTemplate = `{
                 "tags": [
                     "IngredientIDs"
                 ],
-                "summary": "GetAll ingredient by ID",
+                "summary": "Get ingredient by ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "IngredientRequest ID",
+                        "description": "Ingredient ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -328,11 +328,76 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.Ingredient"
+                            "$ref": "#/definitions/dto.IngredientResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "IngredientIDs"
+                ],
+                "summary": "Update ingredient by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Ingredient ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Ingredient body",
+                        "name": "ingredient",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.IngredientRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.IngredientResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -350,7 +415,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "IngredientRequest ID",
+                        "description": "Ingredient ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -648,6 +713,34 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.IngredientRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.IngredientResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.RecipeIngredientRequest": {
             "type": "object",
             "properties": {
@@ -693,6 +786,12 @@ const docTemplate = `{
                 "cook_time_min": {
                     "type": "integer"
                 },
+                "energy": {
+                    "type": "integer"
+                },
+                "fat": {
+                    "type": "number"
+                },
                 "image_url": {
                     "type": "string"
                 },
@@ -707,6 +806,9 @@ const docTemplate = `{
                 },
                 "prep_time_min": {
                     "type": "integer"
+                },
+                "protein": {
+                    "type": "number"
                 },
                 "title": {
                     "type": "string"
@@ -724,6 +826,12 @@ const docTemplate = `{
                 },
                 "created_at": {
                     "type": "string"
+                },
+                "energy": {
+                    "type": "integer"
+                },
+                "fat": {
+                    "type": "number"
                 },
                 "id": {
                     "type": "string"
@@ -743,21 +851,10 @@ const docTemplate = `{
                 "prep_time_min": {
                     "type": "integer"
                 },
+                "protein": {
+                    "type": "number"
+                },
                 "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.Ingredient": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "imageUrl": {
-                    "type": "string"
-                },
-                "name": {
                     "type": "string"
                 }
             }

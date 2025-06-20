@@ -29,8 +29,8 @@ func (it *RecipeRepository) BeginTx(ctx context.Context) (*sqlx.Tx, error) {
 func (it *RecipeRepository) Create(ctx context.Context, recipe *model.Recipe) error {
 	query, args, err := it.sq.
 		Insert("recipes").
-		Columns("id", "title", "category_id", "prep_time_min", "cook_time_min", "method", "created_at", "image_url").
-		Values(recipe.ID, recipe.Title, recipe.CategoryID, recipe.PrepTimeMin, recipe.CookTimeMin, recipe.Method, recipe.CreatedAt, recipe.ImageURL).
+		Columns("id", "title", "category_id", "prep_time_min", "cook_time_min", "method", "created_at", "image_url", "energy", "fat", "protein").
+		Values(recipe.ID, recipe.Title, recipe.CategoryID, recipe.PrepTimeMin, recipe.CookTimeMin, recipe.Method, recipe.CreatedAt, recipe.ImageURL, recipe.Energy, recipe.Fat, recipe.Protein).
 		ToSql()
 	if err != nil {
 		return err
@@ -42,8 +42,8 @@ func (it *RecipeRepository) Create(ctx context.Context, recipe *model.Recipe) er
 func (it *RecipeRepository) CreateWithTx(ctx context.Context, tx *sqlx.Tx, recipe *model.Recipe) error {
 	query, args, err := it.sq.
 		Insert("recipes").
-		Columns("id", "title", "category_id", "prep_time_min", "cook_time_min", "method", "created_at", "image_url").
-		Values(recipe.ID, recipe.Title, recipe.CategoryID, recipe.PrepTimeMin, recipe.CookTimeMin, recipe.Method, recipe.CreatedAt, recipe.ImageURL).
+		Columns("id", "title", "category_id", "prep_time_min", "cook_time_min", "method", "created_at", "image_url", "energy", "fat", "protein").
+		Values(recipe.ID, recipe.Title, recipe.CategoryID, recipe.PrepTimeMin, recipe.CookTimeMin, recipe.Method, recipe.CreatedAt, recipe.ImageURL, recipe.Energy, recipe.Fat, recipe.Protein).
 		ToSql()
 	if err != nil {
 		return err
@@ -55,7 +55,7 @@ func (it *RecipeRepository) CreateWithTx(ctx context.Context, tx *sqlx.Tx, recip
 func (it *RecipeRepository) GetByID(ctx context.Context, id string) (*model.RecipeCategoryIngredients, error) {
 	query, args, err := it.sq.
 		Select(
-			"it.id", "it.title", "it.category_id", "it.prep_time_min", "it.cook_time_min", "it.method", "it.created_at", "it.image_url",
+			"it.id", "it.title", "it.category_id", "it.prep_time_min", "it.cook_time_min", "it.method", "it.created_at", "it.image_url", "it.energy", "it.fat", "it.protein",
 			"c.id AS category_id", "c.name AS category_name", "c.image_url AS category_image_url",
 		).
 		From("recipes it").
@@ -95,7 +95,7 @@ func (it *RecipeRepository) GetByID(ctx context.Context, id string) (*model.Reci
 func (it *RecipeRepository) GetAll(ctx context.Context) ([]model.RecipeCategoryIngredients, error) {
 	query, args, err := it.sq.
 		Select(
-			"it.id", "it.title", "it.category_id", "it.prep_time_min", "it.cook_time_min", "it.method", "it.created_at", "it.image_url",
+			"it.id", "it.title", "it.category_id", "it.prep_time_min", "it.cook_time_min", "it.method", "it.created_at", "it.image_url", "it.energy", "it.fat", "it.protein",
 			"c.id AS category_id", "c.name AS category_name", "c.image_url AS category_image_url",
 		).
 		From("recipes it").
@@ -163,6 +163,9 @@ func (it *RecipeRepository) Update(ctx context.Context, recipe *model.Recipe) er
 		Set("cook_time_min", recipe.CookTimeMin).
 		Set("method", recipe.Method).
 		Set("image_url", recipe.ImageURL).
+		Set("energy", recipe.Energy).
+		Set("fat", recipe.Fat).
+		Set("protein", recipe.Protein).
 		Where(squirrel.Eq{"id": recipe.ID}).
 		ToSql()
 	if err != nil {
@@ -185,13 +188,13 @@ func (it *RecipeRepository) Delete(ctx context.Context, id string) error {
 
 func (it *RecipeRepository) BatchInsert(ctx context.Context, recipes []model.Recipe) error {
 	q := it.sq.Insert("recipes").
-		Columns("id", "title", "category_id", "prep_time_min", "cook_time_min", "method", "created_at", "image_url")
+		Columns("id", "title", "category_id", "prep_time_min", "cook_time_min", "method", "created_at", "image_url", "energy", "fat", "protein")
 
 	for _, rec := range recipes {
 		if rec.ID == "" {
 			rec.ID = uuid.New().String()
 		}
-		q = q.Values(rec.ID, rec.Title, rec.CategoryID, rec.PrepTimeMin, rec.CookTimeMin, rec.Method, time.Now(), rec.ImageURL)
+		q = q.Values(rec.ID, rec.Title, rec.CategoryID, rec.PrepTimeMin, rec.CookTimeMin, rec.Method, time.Now(), rec.ImageURL, rec.Energy, rec.Fat, rec.Protein)
 	}
 
 	query, args, err := q.ToSql()
@@ -221,6 +224,9 @@ func (it *RecipeRepository) UpdateWithTx(ctx context.Context, tx *sqlx.Tx, recip
 		Set("prep_time_min", recipe.PrepTimeMin).
 		Set("cook_time_min", recipe.CookTimeMin).
 		Set("method", recipe.Method).
+		Set("energy", recipe.Energy).
+		Set("fat", recipe.Fat).
+		Set("protein", recipe.Protein).
 		Set("image_url", recipe.ImageURL).
 		Where(squirrel.Eq{"id": recipe.ID})
 

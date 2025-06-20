@@ -8,6 +8,24 @@ definitions:
       name:
         type: string
     type: object
+  dto.IngredientRequest:
+    properties:
+      id:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+    type: object
+  dto.IngredientResponse:
+    properties:
+      id:
+        type: string
+      image_url:
+        type: string
+      name:
+        type: string
+    type: object
   dto.RecipeIngredientRequest:
     properties:
       amount:
@@ -38,6 +56,10 @@ definitions:
         type: string
       cook_time_min:
         type: integer
+      energy:
+        type: integer
+      fat:
+        type: number
       image_url:
         type: string
       ingredients:
@@ -48,6 +70,8 @@ definitions:
         type: string
       prep_time_min:
         type: integer
+      protein:
+        type: number
       title:
         type: string
     type: object
@@ -59,6 +83,10 @@ definitions:
         type: integer
       created_at:
         type: string
+      energy:
+        type: integer
+      fat:
+        type: number
       id:
         type: string
       image_url:
@@ -71,16 +99,9 @@ definitions:
         type: string
       prep_time_min:
         type: integer
+      protein:
+        type: number
       title:
-        type: string
-    type: object
-  model.Ingredient:
-    properties:
-      id:
-        type: string
-      imageUrl:
-        type: string
-      name:
         type: string
     type: object
 info:
@@ -135,7 +156,7 @@ paths:
             additionalProperties:
               type: string
             type: object
-      summary: Create a new category
+      summary: Update a new category
       tags:
       - Categories
   /categories/{id}:
@@ -232,7 +253,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Ingredient'
+              $ref: '#/definitions/dto.IngredientResponse'
             type: array
         "500":
           description: Internal Server Error
@@ -240,26 +261,26 @@ paths:
             additionalProperties:
               type: string
             type: object
-      summary: GetAll all ingredients
+      summary: Get all ingredients
       tags:
       - IngredientIDs
     post:
       consumes:
       - application/json
       parameters:
-      - description: IngredientRequest body
+      - description: Ingredient body
         in: body
         name: ingredient
         required: true
         schema:
-          $ref: '#/definitions/model.Ingredient'
+          $ref: '#/definitions/dto.IngredientRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/model.Ingredient'
+            $ref: '#/definitions/dto.IngredientResponse'
         "400":
           description: Bad Request
           schema:
@@ -278,7 +299,7 @@ paths:
   /ingredients/{id}:
     delete:
       parameters:
-      - description: IngredientRequest ID
+      - description: Ingredient ID
         in: path
         name: id
         required: true
@@ -297,7 +318,7 @@ paths:
       - IngredientIDs
     get:
       parameters:
-      - description: IngredientRequest ID
+      - description: Ingredient ID
         in: path
         name: id
         required: true
@@ -308,14 +329,57 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Ingredient'
+            $ref: '#/definitions/dto.IngredientResponse'
         "404":
           description: Not Found
           schema:
             additionalProperties:
               type: string
             type: object
-      summary: GetAll ingredient by ID
+      summary: Get ingredient by ID
+      tags:
+      - IngredientIDs
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Ingredient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Ingredient body
+        in: body
+        name: ingredient
+        required: true
+        schema:
+          $ref: '#/definitions/dto.IngredientRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.IngredientResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update ingredient by ID
       tags:
       - IngredientIDs
   /recipes:
