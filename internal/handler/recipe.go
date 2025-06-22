@@ -31,11 +31,15 @@ func NewRecipeHandler(r *gin.Engine, svc *service.RecipeService) {
 // @Summary Get all recipes
 // @Tags Recipes
 // @Produce json
+// @Param search query string false "Search by title or ingredient"
+// @Param category_id query string false "Filter by category ID"
 // @Success 200 {array} dto.RecipeResponse
 // @Failure 500 {object} map[string]string
 // @Router /recipes [get]
 func (h *RecipeHandler) GetAll(c *gin.Context) {
-	recipes, err := h.service.GetAll(c.Request.Context())
+	search := c.Query("search")
+	categoryID := c.Query("category_id")
+	recipes, err := h.service.GetAll(c.Request.Context(), search, categoryID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

@@ -26,6 +26,17 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="KubernetesApiProvider">{
+  &quot;contexts&quot;: [
+    {
+      &quot;name&quot;: &quot;g.ter-grigoryants-dev&quot;
+    }
+  ],
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="KubernetesSettings">
+    <option name="contextName" value="g.ter-grigoryants-dev" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -43,6 +54,8 @@
     &quot;Go Build.go build CookFinder.Backend/cmd/api.executor&quot;: &quot;Run&quot;,
     &quot;Makefile Target.dev-install-tooling.executor&quot;: &quot;Run&quot;,
     &quot;Makefile Target.gen-api-swag.executor&quot;: &quot;Run&quot;,
+    &quot;Makefile Target.gen-mocks.executor&quot;: &quot;Run&quot;,
+    &quot;Makefile Target.run-api.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
@@ -80,7 +93,7 @@
       <recent name="$PROJECT_DIR$/migrations" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build CookFinder.Backend/cmd/api">
+  <component name="RunManager" selected="Makefile Target.run-api">
     <configuration name="go build CookFinder.Backend/cmd/api" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="CookFinder.Backend" />
       <working_directory value="$PROJECT_DIR$" />
@@ -102,10 +115,24 @@
       </makefile>
       <method v="2" />
     </configuration>
+    <configuration name="gen-mocks" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/makefile" target="gen-mocks" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <configuration name="run-api" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/makefile" target="run-api" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build CookFinder.Backend/cmd/api" />
+        <item itemvalue="Makefile Target.run-api" />
         <item itemvalue="Makefile Target.gen-api-swag" />
+        <item itemvalue="Makefile Target.gen-mocks" />
+        <item itemvalue="Go Build.go build CookFinder.Backend/cmd/api" />
         <item itemvalue="Makefile Target.dev-install-tooling" />
       </list>
     </recent_temporary>
@@ -120,7 +147,9 @@
       <updated>1749971551577</updated>
       <workItem from="1749971552609" duration="312000" />
       <workItem from="1749971960550" duration="13058000" />
-      <workItem from="1750146940566" duration="9526000" />
+      <workItem from="1750146940566" duration="40015000" />
+      <workItem from="1750510922859" duration="25000" />
+      <workItem from="1750570199469" duration="415000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -242,11 +271,118 @@
       <option name="project" value="LOCAL" />
       <updated>1750241938421</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="init">
+      <option name="closed" value="true" />
+      <created>1750336547764</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1750336547764</updated>
+    </task>
+    <task id="LOCAL-00017" summary="init">
+      <option name="closed" value="true" />
+      <created>1750338866768</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1750338866768</updated>
+    </task>
+    <task id="LOCAL-00018" summary="init">
+      <option name="closed" value="true" />
+      <created>1750339098126</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1750339098126</updated>
+    </task>
+    <task id="LOCAL-00019" summary="init">
+      <option name="closed" value="true" />
+      <created>1750341361911</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1750341361911</updated>
+    </task>
+    <task id="LOCAL-00020" summary="init">
+      <option name="closed" value="true" />
+      <created>1750341541586</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1750341541586</updated>
+    </task>
+    <task id="LOCAL-00021" summary="init">
+      <option name="closed" value="true" />
+      <created>1750343394477</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1750343394477</updated>
+    </task>
+    <task id="LOCAL-00022" summary="init">
+      <option name="closed" value="true" />
+      <created>1750343872930</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1750343872930</updated>
+    </task>
+    <task id="LOCAL-00023" summary="init">
+      <option name="closed" value="true" />
+      <created>1750357933414</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1750357933415</updated>
+    </task>
+    <task id="LOCAL-00024" summary="init">
+      <option name="closed" value="true" />
+      <created>1750402237728</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1750402237728</updated>
+    </task>
+    <task id="LOCAL-00025" summary="init">
+      <option name="closed" value="true" />
+      <created>1750434280842</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1750434280842</updated>
+    </task>
+    <task id="LOCAL-00026" summary="init">
+      <option name="closed" value="true" />
+      <created>1750434544742</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1750434544742</updated>
+    </task>
+    <task id="LOCAL-00027" summary="init">
+      <option name="closed" value="true" />
+      <created>1750441455447</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1750441455447</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
@@ -254,6 +390,16 @@
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/internal/model/recipe_category_ingredients.go</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.gk646.codestats.settings.Save">
     <option name="commitTimePoints">
@@ -348,6 +494,66 @@
           <option name="totalLines" value="4028" />
           <option name="info" value="init" />
         </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750336547779" />
+          <option name="linesCode" value="3132" />
+          <option name="totalLines" value="4549" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750338866794" />
+          <option name="linesCode" value="3140" />
+          <option name="totalLines" value="4561" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750339098157" />
+          <option name="linesCode" value="3140" />
+          <option name="totalLines" value="4561" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750341361944" />
+          <option name="linesCode" value="3224" />
+          <option name="totalLines" value="4680" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750341541604" />
+          <option name="linesCode" value="3225" />
+          <option name="totalLines" value="4681" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750343394497" />
+          <option name="linesCode" value="3226" />
+          <option name="totalLines" value="4682" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750343872957" />
+          <option name="linesCode" value="3292" />
+          <option name="totalLines" value="4780" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750357933461" />
+          <option name="linesCode" value="3390" />
+          <option name="totalLines" value="4921" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750434544771" />
+          <option name="linesCode" value="3687" />
+          <option name="totalLines" value="5305" />
+          <option name="info" value="init" />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750441455477" />
+          <option name="linesCode" value="3690" />
+          <option name="totalLines" value="5308" />
+          <option name="info" value="init" />
+        </TimePoint>
       </list>
     </option>
     <option name="genericTimePoints">
@@ -357,6 +563,18 @@
           <option name="linesCode" value="2718" />
           <option name="totalLines" value="4028" />
           <option name="info" value="18 июн. 2025 г." />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750357933461" />
+          <option name="linesCode" value="3390" />
+          <option name="totalLines" value="4921" />
+          <option name="info" value="19 июн. 2025 г." />
+        </TimePoint>
+        <TimePoint>
+          <option name="timestamp" value="1750441455477" />
+          <option name="linesCode" value="3690" />
+          <option name="totalLines" value="5308" />
+          <option name="info" value="20 июн. 2025 г." />
         </TimePoint>
       </list>
     </option>

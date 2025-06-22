@@ -446,6 +446,20 @@ const docTemplate = `{
                     "Recipes"
                 ],
                 "summary": "Get all recipes",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search by title or ingredient",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by category ID",
+                        "name": "category_id",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

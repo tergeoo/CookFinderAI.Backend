@@ -92,16 +92,34 @@ func (it *RecipeRepository) GetByID(ctx context.Context, id string) (*model.Reci
 	}, nil
 }
 
-func (it *RecipeRepository) GetAll(ctx context.Context) ([]model.RecipeCategoryIngredients, error) {
-	query, args, err := it.sq.
+func (it *RecipeRepository) GetAll(ctx context.Context, search, categoryID string) ([]model.RecipeCategoryIngredients, error) {
+	builder := it.sq.
 		Select(
-			"it.id", "it.title", "it.category_id", "it.prep_time_min", "it.cook_time_min", "it.method", "it.created_at", "it.image_url", "it.energy", "it.fat", "it.protein",
+			"DISTINCT it.id", "it.title", "it.category_id", "it.prep_time_min", "it.cook_time_min", "it.method", "it.created_at", "it.image_url", "it.energy", "it.fat", "it.protein",
 			"c.id AS category_id", "c.name AS category_name", "c.image_url AS category_image_url",
 		).
 		From("recipes it").
 		Join("recipe_categories c ON it.category_id = c.id").
-		OrderBy("it.created_at DESC").
-		ToSql()
+		LeftJoin("recipe_ingredients ri ON ri.recipe_id = it.id").
+		LeftJoin("ingredients i ON i.id = ri.ingredient_id").
+		OrderBy("it.created_at DESC")
+
+	// Фильтрация по названию рецепта и ингредиентам
+	if search != "" {
+		builder = builder.Where(
+			squirrel.Or{
+				squirrel.Expr("LOWER(it.title) LIKE LOWER(?)", "%"+search+"%"),
+				squirrel.Expr("LOWER(i.name) LIKE LOWER(?)", "%"+search+"%"),
+			},
+		)
+	}
+
+	// Фильтрация по категории
+	if categoryID != "" {
+		builder = builder.Where("it.category_id = ?", categoryID)
+	}
+
+	query, args, err := builder.ToSql()
 	if err != nil {
 		return nil, err
 	}

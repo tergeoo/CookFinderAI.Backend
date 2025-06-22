@@ -384,6 +384,15 @@ paths:
       - IngredientIDs
   /recipes:
     get:
+      parameters:
+      - description: Search by title or ingredient
+        in: query
+        name: search
+        type: string
+      - description: Filter by category ID
+        in: query
+        name: category_id
+        type: string
       produces:
       - application/json
       responses:

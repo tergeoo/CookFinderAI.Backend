@@ -55,8 +55,8 @@ func (s *RecipeService) GetByID(ctx context.Context, id string) (*model.RecipeCa
 	return s.recipeRepo.GetByID(ctx, id)
 }
 
-func (s *RecipeService) GetAll(ctx context.Context) ([]model.RecipeCategoryIngredients, error) {
-	return s.recipeRepo.GetAll(ctx)
+func (s *RecipeService) GetAll(ctx context.Context, search, categoryID string) ([]model.RecipeCategoryIngredients, error) {
+	return s.recipeRepo.GetAll(ctx, search, categoryID)
 }
 
 func (s *RecipeService) Update(ctx context.Context, recipe *model.Recipe) error {
